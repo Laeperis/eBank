@@ -25,14 +25,14 @@
             android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="用户名"
+            android:text="@string/username"
             android:textSize="16sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/tvPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="手机号"
+            android:text="@string/phone"
             android:textSize="14sp"
             android:textColor="#888888" />
     </LinearLayout>

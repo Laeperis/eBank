@@ -30,4 +30,15 @@
     <string name="pick_from_gallery">从相册选择</string>
     <string name="use_default_avatar">使用默认头像</string>
     <string name="press_again_exit">再按一次退出App</string>
+    <string name="empty_email">邮箱不能为空</string>
+    <string name="invalid_email">邮箱格式不正确</string>
+    <string name="empty_phone">手机号不能为空</string>
+    <string name="invalid_phone">手机号格式不正确</string>
+    <string name="register_title">注册新账号</string>
+    <string name="email">邮箱</string>
+    <string name="phone">手机号</string>
+    <string name="login_title">欢迎登录</string>
+    <string name="nav_username">用户名</string>
+    <string name="nav_email">邮箱</string>
+    <string name="nav_avatar_desc">头像</string>
 </resources>

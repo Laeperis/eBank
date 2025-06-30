@@ -67,12 +67,29 @@ public class RegisterActivity extends AppCompatActivity {
                 ToastUtil.show(this, getString(R.string.empty_username_or_password));
                 return;
             }
+            if (email.isEmpty()) {
+                ToastUtil.show(this, getString(R.string.empty_email));
+                return;
+            }
+            if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                ToastUtil.show(this, getString(R.string.invalid_email));
+                return;
+            }
+            if (phone.isEmpty()) {
+                ToastUtil.show(this, getString(R.string.empty_phone));
+                return;
+            }
+            if (!phone.matches("^1[3-9]\\d{9}$")) {
+                ToastUtil.show(this, getString(R.string.invalid_phone));
+                return;
+            }
             AsyncTask.execute(() -> {
                 if (userDao.getUserByUsername(username) != null) {
                     runOnUiThread(() -> ToastUtil.show(this, getString(R.string.register_failed)));
                 } else {
                     userDao.logoutAll();
-                    User user = new User(UUID.randomUUID().toString(), username, password, email, phone);
+                    String userCode = generateUserCode(userDao);
+                    User user = new User(UUID.randomUUID().toString(), username, password, email, phone, userCode);
                     user.isLoggedIn = true;
                     user.avatarUri = avatarUri == null ? null : avatarUri.toString();
                     userDao.insert(user);
@@ -197,5 +214,19 @@ public class RegisterActivity extends AppCompatActivity {
         shape.setShape(GradientDrawable.OVAL);
         shape.setColor(0xFFE3F2FD); // 浅蓝色背景
         ivAvatar.setBackground(shape);
+    }
+
+    private String generateUserCode(UserDao userDao) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        java.util.Random random = new java.util.Random();
+        String code;
+        do {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 6; i++) {
+                sb.append(chars.charAt(random.nextInt(chars.length())));
+            }
+            code = sb.toString();
+        } while (userDao.getUserByUserCode(code) != null);
+        return code;
     }
 } 

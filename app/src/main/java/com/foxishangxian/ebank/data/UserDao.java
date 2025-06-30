@@ -39,4 +39,7 @@ public interface UserDao {
 
     @Query("SELECT * FROM users WHERE phone = :phone LIMIT 1")
     User getUserByPhone(String phone);
+
+    @Query("SELECT * FROM users WHERE userCode = :userCode LIMIT 1")
+    User getUserByUserCode(String userCode);
 } 

@@ -33,7 +33,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="注册新账号"
+        android:text="@string/register_title"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
         android:layout_marginBottom="36dp" />
 
@@ -45,7 +45,7 @@
             android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="用户名" />
+            android:hint="@string/username" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -56,7 +56,7 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="密码"
+            android:hint="@string/password"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,7 +68,7 @@
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="邮箱（可选）" />
+            android:hint="@string/email" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -79,14 +79,14 @@
             android:id="@+id/etPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="手机号（可选）" />
+            android:hint="@string/phone" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="注册"
+        android:text="@string/register"
         style="@style/Widget.Material3.Button"
         android:textSize="18sp"
         android:layout_marginBottom="18dp" />
@@ -95,7 +95,7 @@
         android:id="@+id/btnToLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="已有账号？去登录"
+        android:text="@string/has_account_go_login"
         style="@style/Widget.Material3.Button.OutlinedButton"
         android:textSize="16sp" />
 

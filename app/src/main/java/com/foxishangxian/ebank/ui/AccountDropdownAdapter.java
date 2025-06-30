@@ -53,7 +53,7 @@ public class AccountDropdownAdapter extends ArrayAdapter<User> {
         shape.setColor(0xFFE3F2FD);
         ivAvatar.setBackground(shape);
         tvUsername.setText(user.username);
-        tvPhone.setText(user.phone == null ? "" : user.phone);
+        tvPhone.setText(user.userCode == null ? "" : user.userCode);
         return convertView;
     }
 } 

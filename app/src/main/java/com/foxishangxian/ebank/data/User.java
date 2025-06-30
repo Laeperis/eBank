@@ -9,6 +9,7 @@ public class User {
     @PrimaryKey
     @NonNull
     public String uid; // 唯一标识符
+    public String userCode;
 
     public String username;
     public String password;
@@ -21,12 +22,13 @@ public class User {
     public boolean isEmailVerified = false;
     public boolean isPhoneVerified = false;
 
-    public User(@NonNull String uid, String username, String password, String email, String phone) {
+    public User(@NonNull String uid, String username, String password, String email, String phone, String userCode) {
         this.uid = uid;
         this.username = username;
         this.password = password;
         this.email = email;
         this.phone = phone;
+        this.userCode = userCode;
         this.isLoggedIn = false;
         this.avatarUri = null;
     }

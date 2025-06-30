@@ -13,7 +13,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="欢迎登录"
+        android:text="@string/login_title"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
         android:layout_marginBottom="36dp" />
 
@@ -40,7 +40,7 @@
             android:id="@+id/etAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="账号（用户名/邮箱/手机号）"
+            android:hint="@string/account_hint"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,7 +52,7 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="密码"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -61,7 +61,7 @@
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="登录"
+        android:text="@string/login"
         style="@style/Widget.Material3.Button"
         android:textSize="18sp"
         android:layout_marginBottom="18dp" />
@@ -70,7 +70,7 @@
         android:id="@+id/btnToRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="没有账号？去注册"
+        android:text="@string/no_account_go_register"
         style="@style/Widget.Material3.Button.OutlinedButton"
         android:textSize="16sp" />
 

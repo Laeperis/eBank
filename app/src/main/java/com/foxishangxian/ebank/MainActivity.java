@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                         Glide.with(this).load(R.drawable.ic_avatar_circle_bg).circleCrop().into(ivNavAvatar);
                     }
                     tvNavUsername.setText(loggedInUser.username);
-                    tvNavEmail.setText(loggedInUser.email == null ? "" : loggedInUser.email);
+                    tvNavEmail.setText(loggedInUser.userCode == null ? "" : loggedInUser.userCode);
                 }
             });
         });

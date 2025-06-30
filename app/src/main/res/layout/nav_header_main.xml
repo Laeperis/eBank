@@ -17,7 +17,7 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="头像"
+        android:contentDescription="@string/nav_avatar_desc"
         android:src="@drawable/ic_avatar_circle_bg"
         android:scaleType="centerCrop"
         android:background="@drawable/ic_avatar_circle_bg"
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="用户名"
+        android:text="@string/nav_username"
         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         android:layout_marginBottom="4dp" />
 
@@ -37,6 +37,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="邮箱"
+        android:text="@string/nav_email"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 </LinearLayout>
