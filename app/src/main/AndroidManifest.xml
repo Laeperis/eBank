@@ -45,6 +45,8 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/UCropTheme.FixNavBar" />
+        <activity android:name=".ui.card.CardManageActivity" />
+        <activity android:name=".ui.card.CardDetailActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.foxishangxian.ebank.fileprovider"

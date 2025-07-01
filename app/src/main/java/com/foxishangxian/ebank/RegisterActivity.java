@@ -31,6 +31,10 @@ import java.io.FileOutputStream;
 import com.yalantis.ucrop.UCrop;
 import android.graphics.drawable.GradientDrawable;
 import com.bumptech.glide.Glide;
+import com.foxishangxian.ebank.data.BankCard;
+import com.foxishangxian.ebank.data.BankCardDao;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PICK_IMAGE = 1001;
@@ -93,6 +97,16 @@ public class RegisterActivity extends AppCompatActivity {
                     user.isLoggedIn = true;
                     user.avatarUri = avatarUri == null ? null : avatarUri.toString();
                     userDao.insert(user);
+                    // 自动为新用户生成一张银行卡
+                    BankCardDao bankCardDao = UserDatabase.getInstance(this).bankCardDao();
+                    String cardType = "储蓄卡";
+                    String cardNumber = generateCardNumber();
+                    double balance = 100.0;
+                    String startDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                    String endDate = "2029-12-31";
+                    double limitPerDay = 5000.0;
+                    BankCard card = new BankCard(user.uid, cardType, cardNumber, balance, startDate, endDate, limitPerDay, phone, "");
+                    bankCardDao.insert(card);
                     runOnUiThread(() -> {
                         ToastUtil.show(this, getString(R.string.register_success));
                         startActivity(new Intent(this, MainActivity.class));
@@ -228,5 +242,14 @@ public class RegisterActivity extends AppCompatActivity {
             code = sb.toString();
         } while (userDao.getUserByUserCode(code) != null);
         return code;
+    }
+
+    private String generateCardNumber() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("6222");
+        for (int i = 0; i < 12; i++) {
+            sb.append((int)(Math.random() * 10));
+        }
+        return sb.toString();
     }
 } 

@@ -73,9 +73,9 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
         bannerHandler.postDelayed(bannerRunnable, BANNER_INTERVAL);
 
         // 四大功能按钮点击事件
-        binding.llCardManage.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到卡片管理")
-        );
+        binding.llCardManage.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), com.foxishangxian.ebank.ui.card.CardManageActivity.class));
+        });
         binding.llTransfer.setOnClickListener(v ->
             ToastUtil.show(getContext(), "跳转到转账汇款")
         );

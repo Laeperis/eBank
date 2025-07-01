@@ -4,12 +4,14 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
-@Database(entities = {User.class}, version = 3, exportSchema = false)
+@Database(entities = {User.class, BankCard.class}, version = 4, exportSchema = false)
 public abstract class UserDatabase extends RoomDatabase {
     private static volatile UserDatabase INSTANCE;
 
     public abstract UserDao userDao();
+    public abstract BankCardDao bankCardDao();
 
     public static UserDatabase getInstance(Context context) {
         if (INSTANCE == null) {
