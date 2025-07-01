@@ -22,4 +22,15 @@
     <style name="Theme.EBank.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar" />
 
     <style name="Theme.EBank.PopupOverlay" parent="ThemeOverlay.Material3.Light" />
+
+    <style name="Theme.EBank.Red" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primaryRed</item>
+        <item name="colorPrimaryVariant">@color/primaryRedDark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/primaryRed</item>
+        <item name="colorSecondaryVariant">@color/primaryRedDark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:statusBarColor">@color/primaryRedDark</item>
+        <item name="android:navigationBarColor">@color/primaryRed</item>
+    </style>
 </resources>

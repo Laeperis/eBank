@@ -10,6 +10,9 @@ import android.widget.TextView;
 import android.net.Uri;
 import android.graphics.drawable.GradientDrawable;
 import android.widget.Toast;
+import android.content.SharedPreferences;
+import android.app.AlertDialog;
+import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -39,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 主题切换：必须在super.onCreate前
+        SharedPreferences sp = getSharedPreferences("theme", MODE_PRIVATE);
+        String theme = sp.getString("theme", "default");
+        if ("red".equals(theme)) setTheme(R.style.Theme_EBank_Red);
         super.onCreate(savedInstanceState);
 
         // 设置双击返回键退出
@@ -183,9 +190,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_theme) {
+            showThemeDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showThemeDialog() {
+        String[] themes = {"默认主题", "红色主题"};
+        SharedPreferences sp = getSharedPreferences("theme", MODE_PRIVATE);
+        String cur = sp.getString("theme", "default");
+        int checked = "red".equals(cur) ? 1 : 0;
+        new AlertDialog.Builder(this)
+            .setTitle("选择主题")
+            .setSingleChoiceItems(themes, checked, (d, which) -> {
+                String sel = which == 1 ? "red" : "default";
+                sp.edit().putString("theme", sel).apply();
+                d.dismiss();
+                recreate();
+            })
+            .setNegativeButton("取消", null)
+            .show();
     }
 
     @Override
