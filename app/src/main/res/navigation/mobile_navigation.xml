@@ -8,24 +8,19 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.foxishangxian.ebank.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="首页"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.foxishangxian.ebank.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_wealth"
+        android:name="com.foxishangxian.ebank.ui.wealth.WealthFragment"
+        android:label="财富"
+        tools:layout="@layout/fragment_wealth" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.foxishangxian.ebank.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_mine"
+        android:name="com.foxishangxian.ebank.ui.mine.MineFragment"
+        android:label="我的"
+        tools:layout="@layout/fragment_mine" />
 
-    <fragment
-        android:id="@+id/nav_settings"
-        android:name="com.foxishangxian.ebank.ui.SettingsFragment"
-        android:label="设置"
-        tools:layout="@layout/fragment_settings" />
 </navigation>

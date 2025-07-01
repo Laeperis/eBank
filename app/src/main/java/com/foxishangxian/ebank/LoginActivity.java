@@ -106,8 +106,6 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, RegisterActivity.class));
             finish();
         });
-
-        //btnToRegister.setVisibility(View.GONE); // 隐藏注册按钮
     }
 
     @Override

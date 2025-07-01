@@ -9,9 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.net.Uri;
 import android.graphics.drawable.GradientDrawable;
+import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,20 +20,37 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.OnBackPressedCallback;
 
 import com.foxishangxian.ebank.databinding.ActivityMainBinding;
 import com.foxishangxian.ebank.data.User;
 import com.foxishangxian.ebank.data.UserDatabase;
 import com.bumptech.glide.Glide;
+import com.foxishangxian.ebank.ui.ToastUtil;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private long lastBackPressedTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 设置双击返回键退出
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (System.currentTimeMillis() - lastBackPressedTime < 2000) {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                } else {
+                    ToastUtil.show(MainActivity.this, "再按一次退出应用");
+                    lastBackPressedTime = System.currentTimeMillis();
+                }
+            }
+        });
 
         // 自动登录判断（异步）
         AsyncTask.execute(() -> {
@@ -48,23 +66,29 @@ public class MainActivity extends AppCompatActivity {
                     setContentView(binding.getRoot());
 
                     setSupportActionBar(binding.appBarMain.toolbar);
-                    binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null)
-                                    .setAnchorView(R.id.fab).show();
-                        }
-                    });
                     DrawerLayout drawer = binding.drawerLayout;
                     NavigationView navigationView = binding.navView;
                     mAppBarConfiguration = new AppBarConfiguration.Builder(
-                            R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                            R.id.nav_home, R.id.nav_wealth, R.id.nav_mine)
                             .setOpenableLayout(drawer)
                             .build();
                     NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
                     NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
                     NavigationUI.setupWithNavController(navigationView, navController);
+
+                    // 设置底部导航栏
+                    BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+                    NavigationUI.setupWithNavController(bottomNav, navController);
+
+                    // 设置侧边栏点击事件
+                    navigationView.setNavigationItemSelectedListener(item -> {
+                        if (item.getItemId() == R.id.nav_settings) {
+                            startActivity(new Intent(this, SettingsActivity.class));
+                            drawer.closeDrawers();
+                            return true;
+                        }
+                        return false;
+                    });
 
                     // 侧边栏显示当前用户信息
                     ImageView ivNavAvatar = navigationView.getHeaderView(0).findViewById(R.id.ivNavAvatar);
@@ -95,4 +119,6 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
 }
