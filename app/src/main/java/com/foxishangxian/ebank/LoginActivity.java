@@ -25,6 +25,7 @@ import com.foxishangxian.ebank.ui.AccountDropdownAdapter;
 import com.foxishangxian.ebank.ui.ToastUtil;
 import android.widget.Spinner;
 import android.widget.AdapterView;
+import androidx.activity.OnBackPressedCallback;
 
 public class LoginActivity extends AppCompatActivity {
     private UserDao userDao;
@@ -106,16 +107,20 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, RegisterActivity.class));
             finish();
         });
-    }
 
-    @Override
-    public void onBackPressed() {
-        long now = System.currentTimeMillis();
-        if (now - lastBackPressedTime < 2000) {
-            super.onBackPressed();
-        } else {
-            ToastUtil.show(this, getString(R.string.press_again_exit));
-            lastBackPressedTime = now;
-        }
+        // 设置双击返回键退出
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                long now = System.currentTimeMillis();
+                if (now - lastBackPressedTime < 2000) {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                } else {
+                    ToastUtil.show(LoginActivity.this, getString(R.string.press_again_exit));
+                    lastBackPressedTime = now;
+                }
+            }
+        });
     }
 } 
