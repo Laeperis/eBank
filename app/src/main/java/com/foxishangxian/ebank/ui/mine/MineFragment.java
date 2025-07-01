@@ -17,6 +17,7 @@ import android.net.Uri;
 import com.foxishangxian.ebank.R;
 import android.content.Intent;
 import com.foxishangxian.ebank.SettingsActivity;
+import com.foxishangxian.ebank.ProfileActivity;
 
 public class MineFragment extends Fragment {
 
@@ -31,9 +32,10 @@ public class MineFragment extends Fragment {
         loadUserInfo();
 
         // 功能按钮点击事件
-        binding.btnProfile.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到个人资料")
-        );
+        binding.btnProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ProfileActivity.class);
+            startActivity(intent);
+        });
         binding.btnSecurity.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SettingsActivity.class);
             startActivity(intent);
