@@ -20,6 +20,8 @@ import android.text.InputFilter;
 import android.text.InputType;
 import com.foxishangxian.ebank.ui.ToastUtil;
 import com.foxishangxian.ebank.ui.PasswordInputDialogUtil;
+import android.os.Handler;
+import android.os.Looper;
 
 public class CardDetailActivity extends AppCompatActivity {
     private BankCard currentCard;
@@ -71,7 +73,9 @@ public class CardDetailActivity extends AppCompatActivity {
     private void showSetNewPasswordFlow() {
         PasswordInputDialogUtil.showPasswordInputDialog(this, "请输入新密码", newPwd -> {
             if (newPwd.length() != 6) {
-                ToastUtil.show(this, "新密码必须为6位数字");
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    ToastUtil.show(this, "新密码必须为6位数字");
+                }, 300);
                 return;
             }
             PasswordInputDialogUtil.showPasswordInputDialog(this, "请再次输入新密码", confirmPwd -> {
@@ -97,7 +101,9 @@ public class CardDetailActivity extends AppCompatActivity {
             }
             PasswordInputDialogUtil.showPasswordInputDialog(this, "请输入新密码", newPwd -> {
                 if (newPwd.length() != 6) {
-                    ToastUtil.show(this, "新密码必须为6位数字");
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        ToastUtil.show(this, "新密码必须为6位数字");
+                    }, 300);
                     return;
                 }
                 PasswordInputDialogUtil.showPasswordInputDialog(this, "请再次输入新密码", confirmPwd -> {

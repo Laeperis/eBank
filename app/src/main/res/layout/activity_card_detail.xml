@@ -131,20 +131,20 @@
                 android:text="￥5000.00"
                 android:textSize="16sp"
                 android:textColor="@android:color/darker_gray"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="24dp" />
+
+            <Button
+                android:id="@+id/btn_change_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="修改密码"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/purple_500"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
 
         </LinearLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/btn_change_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="修改密码"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="16dp"
-        android:layout_gravity="end"
-        android:backgroundTint="@color/purple_500"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"/>
 </LinearLayout> 

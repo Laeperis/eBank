@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.os.Handler;
 import android.os.Looper;
+import android.content.DialogInterface;
 
 public class PasswordInputDialogUtil {
     public interface OnPasswordInputListener {
@@ -73,14 +74,35 @@ public class PasswordInputDialogUtil {
         }
         builder.setView(layout);
         builder.setNegativeButton("取消", null);
-        builder.setPositiveButton("确定", (d, w) -> {
-            StringBuilder pwd = new StringBuilder();
-            for (EditText et : edits) pwd.append(et.getText().toString());
-            if (pwd.toString().length() == 6 && listener != null) {
-                listener.onPasswordInput(pwd.toString());
-            }
-        });
+        builder.setPositiveButton("确定", null); // 先不设置回调，后面手动处理
         final AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(d -> {
+            final android.widget.Button positiveBtn = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            positiveBtn.setEnabled(false);
+            // 监听输入变化，动态设置按钮可用
+            android.text.TextWatcher watcher = new android.text.TextWatcher() {
+                public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+                public void onTextChanged(CharSequence s, int st, int b, int c) {
+                    boolean full = true;
+                    for (EditText et : edits) {
+                        if (et.getText().toString().isEmpty()) {
+                            full = false;
+                            break;
+                        }
+                    }
+                    positiveBtn.setEnabled(full);
+                }
+                public void afterTextChanged(android.text.Editable s) {}
+            };
+            for (EditText et : edits) et.addTextChangedListener(watcher);
+            // 设置点击事件
+            positiveBtn.setOnClickListener(v -> {
+                StringBuilder pwd = new StringBuilder();
+                for (EditText et : edits) pwd.append(et.getText().toString());
+                if (listener != null) listener.onPasswordInput(pwd.toString());
+                dialog.dismiss();
+            });
+        });
         dialog.show();
         // 自动弹出输入法
         new Handler(Looper.getMainLooper()).postDelayed(() -> {

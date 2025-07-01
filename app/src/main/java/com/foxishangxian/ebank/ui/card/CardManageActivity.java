@@ -15,7 +15,6 @@ import com.foxishangxian.ebank.data.User;
 import java.util.List;
 import java.util.ArrayList;
 import androidx.appcompat.widget.Toolbar;
-import com.foxishangxian.ebank.util.ToastUtil;
 
 public class CardManageActivity extends AppCompatActivity implements CardManageAdapter.OnCardClickListener {
     private RecyclerView recyclerView;
