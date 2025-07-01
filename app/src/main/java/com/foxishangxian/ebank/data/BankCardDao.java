@@ -26,4 +26,7 @@ public interface BankCardDao {
 
     @Query("SELECT * FROM bank_card WHERE id = :id")
     BankCard getCardById(int id);
+
+    @Query("SELECT * FROM bank_card WHERE cardNumber = :cardNumber LIMIT 1")
+    BankCard getCardByNumber(String cardNumber);
 } 
