@@ -87,6 +87,38 @@ public class MainActivity extends AppCompatActivity {
                             drawer.closeDrawers();
                             return true;
                         }
+                        if (item.getItemId() == R.id.nav_debug_add_500) {
+                            AsyncTask.execute(() -> {
+                                User user = db.userDao().getLoggedInUser();
+                                if (user != null) {
+                                    java.util.List<com.foxishangxian.ebank.data.BankCard> cards = db.bankCardDao().getCardsByUserId(user.uid);
+                                    if (cards == null || cards.isEmpty()) {
+                                        cards = db.bankCardDao().getCardsByPhone(user.phone);
+                                    }
+                                    if (cards != null && !cards.isEmpty()) {
+                                        for (com.foxishangxian.ebank.data.BankCard card : cards) {
+                                            card.balance += 500;
+                                            db.bankCardDao().update(card);
+                                        }
+                                        runOnUiThread(() -> {
+                                            ToastUtil.show(this, "已为你所有银行卡加500元！");
+                                            drawer.closeDrawers();
+                                        });
+                                    } else {
+                                        runOnUiThread(() -> {
+                                            ToastUtil.show(this, "未找到银行卡！");
+                                            drawer.closeDrawers();
+                                        });
+                                    }
+                                } else {
+                                    runOnUiThread(() -> {
+                                        ToastUtil.show(this, "未登录用户！");
+                                        drawer.closeDrawers();
+                                    });
+                                }
+                            });
+                            return true;
+                        }
                         return false;
                     });
 
