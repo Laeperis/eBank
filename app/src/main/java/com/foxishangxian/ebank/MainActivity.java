@@ -27,6 +27,9 @@ import com.foxishangxian.ebank.data.User;
 import com.foxishangxian.ebank.data.UserDatabase;
 import com.bumptech.glide.Glide;
 import com.foxishangxian.ebank.ui.ToastUtil;
+import com.foxishangxian.ebank.data.BankCard;
+import com.foxishangxian.ebank.data.TransferRecord;
+import com.foxishangxian.ebank.data.TransferRecordDao;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,16 +90,16 @@ public class MainActivity extends AppCompatActivity {
                             drawer.closeDrawers();
                             return true;
                         }
-                        if (item.getItemId() == R.id.nav_debug_add_500) {
+                        if (item.getItemId() == R.id.nav_debug_add_500_money) {
                             AsyncTask.execute(() -> {
                                 User user = db.userDao().getLoggedInUser();
                                 if (user != null) {
-                                    java.util.List<com.foxishangxian.ebank.data.BankCard> cards = db.bankCardDao().getCardsByUserId(user.uid);
+                                    java.util.List<BankCard> cards = db.bankCardDao().getCardsByUserId(user.uid);
                                     if (cards == null || cards.isEmpty()) {
                                         cards = db.bankCardDao().getCardsByPhone(user.phone);
                                     }
                                     if (cards != null && !cards.isEmpty()) {
-                                        for (com.foxishangxian.ebank.data.BankCard card : cards) {
+                                        for (BankCard card : cards) {
                                             card.balance += 500;
                                             db.bankCardDao().update(card);
                                         }
@@ -113,6 +116,46 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     runOnUiThread(() -> {
                                         ToastUtil.show(this, "未登录用户！");
+                                        drawer.closeDrawers();
+                                    });
+                                }
+                            });
+                            return true;
+                        }
+                        if (item.getItemId() == R.id.nav_debug_add_500_records) {
+                            AsyncTask.execute(() -> {
+                                java.util.List<BankCard> cards = db.bankCardDao().getAllCards();
+                                if (cards != null && cards.size() >= 2) {
+                                    java.util.Random random = new java.util.Random();
+                                    TransferRecordDao recordDao = db.transferRecordDao();
+                                    long startTime = 1672502400000L; // 2023-01-01 00:00:00
+                                    long endTime = 1751990400000L;   // 2025-07-01 00:00:00
+                                    for (int i = 0; i < 500; i++) {
+                                        int fromIdx = random.nextInt(cards.size());
+                                        int toIdx = random.nextInt(cards.size());
+                                        while (toIdx == fromIdx) toIdx = random.nextInt(cards.size());
+                                        BankCard fromCardObj = cards.get(fromIdx);
+                                        BankCard toCardObj = cards.get(toIdx);
+                                        String fromCard = fromCardObj.cardNumber;
+                                        String toCard = toCardObj.cardNumber;
+                                        double amount = 1 + (9999 - 1) * random.nextDouble();
+                                        long time = startTime + (long) (random.nextDouble() * (endTime - startTime));
+                                        TransferRecord record = new TransferRecord();
+                                        record.fromCard = fromCard;
+                                        record.toCard = toCard;
+                                        record.amount = Math.round(amount * 100.0) / 100.0;
+                                        record.time = time;
+                                        record.fromUid = fromCardObj.userId;
+                                        record.toUid = toCardObj.userId;
+                                        recordDao.insert(record);
+                                    }
+                                    runOnUiThread(() -> {
+                                        ToastUtil.show(this, "已添加500条随机转账记录！");
+                                        drawer.closeDrawers();
+                                    });
+                                } else {
+                                    runOnUiThread(() -> {
+                                        ToastUtil.show(this, "所有用户银行卡总数不足2张，无法生成记录！");
                                         drawer.closeDrawers();
                                     });
                                 }

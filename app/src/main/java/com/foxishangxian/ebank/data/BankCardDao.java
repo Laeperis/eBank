@@ -29,4 +29,7 @@ public interface BankCardDao {
 
     @Query("SELECT * FROM bank_card WHERE cardNumber = :cardNumber LIMIT 1")
     BankCard getCardByNumber(String cardNumber);
+
+    @Query("SELECT * FROM bank_card")
+    List<BankCard> getAllCards();
 } 

@@ -80,10 +80,10 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
             startActivity(new Intent(getContext(), com.foxishangxian.ebank.ui.TransferActivity.class))
         );
         binding.llIncomeExpense.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到收支分析")
+            ToastUtil.show(getContext(), "做不完了，反正是一堆图表（By：佛系上线组）")
         );
         binding.llTransferRecord.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到转账记录")
+            startActivity(new Intent(getContext(), com.foxishangxian.ebank.ui.TransferRecordActivity.class))
         );
 
         // 设置下拉刷新
