@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_menu_gallery"
+        android:icon="@drawable/ic_home"
         android:title="首页" />
     <item
         android:id="@+id/nav_wealth"
-        android:icon="@drawable/ic_menu_camera"
+        android:icon="@drawable/ic_wealthy"
         android:title="财富" />
     <item
         android:id="@+id/nav_mine"
-        android:icon="@drawable/ic_setting"
+        android:icon="@drawable/ic_mine"
         android:title="我的" />
 </menu> 

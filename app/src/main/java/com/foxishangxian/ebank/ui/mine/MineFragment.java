@@ -35,9 +35,6 @@ public class MineFragment extends Fragment {
         binding.btnSecurity.setOnClickListener(v ->
             ToastUtil.show(getContext(), "跳转到安全设置")
         );
-        binding.btnNotification.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到消息通知")
-        );
         binding.btnHelp.setOnClickListener(v ->
             ToastUtil.show(getContext(), "跳转到帮助中心")
         );

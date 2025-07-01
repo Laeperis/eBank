@@ -15,7 +15,7 @@ import java.util.List;
 public class GoldPriceApiService {
     private static final String TAG = "GoldPriceApiService";
     private static final String API_URL = "https://api.jisuapi.com/gold/shgold";
-    private static final String API_KEY = "c812e10685414c68";
+    private static final String API_KEY = "27244af53cc3d211";
 
     public interface GoldPriceCallback {
         void onSuccess(List<GoldPrice> goldPrices);

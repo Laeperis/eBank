@@ -18,12 +18,15 @@ import android.webkit.WebSettings;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.widget.EditText;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.foxishangxian.ebank.databinding.FragmentHomeBinding;
 import com.foxishangxian.ebank.ui.ToastUtil;
 import com.foxishangxian.ebank.ui.NewsAdapter;
 import com.foxishangxian.ebank.api.NewsApiService;
 import com.foxishangxian.ebank.data.NewsItem;
+import com.foxishangxian.ebank.ui.home.BannerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +43,11 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
     private boolean isLoading = false;
     private boolean hasMoreData = true;
 
+    // Banner自动轮播相关
+    private Handler bannerHandler = new Handler(Looper.getMainLooper());
+    private Runnable bannerRunnable;
+    private final int BANNER_INTERVAL = 3000; // 3秒
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -48,9 +56,25 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // 设置 Banner 轮播图
+        BannerAdapter bannerAdapter = new BannerAdapter(getContext());
+        binding.bannerViewPager.setAdapter(bannerAdapter);
+
+        // 自动轮播逻辑
+        bannerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                int count = bannerAdapter.getItemCount();
+                int nextItem = (binding.bannerViewPager.getCurrentItem() + 1) % count;
+                binding.bannerViewPager.setCurrentItem(nextItem, true);
+                bannerHandler.postDelayed(this, BANNER_INTERVAL);
+            }
+        };
+        bannerHandler.postDelayed(bannerRunnable, BANNER_INTERVAL);
+
         // 绑定银行卡名和金额（可根据实际数据动态设置）
-        binding.tvBankName.setText("中国银行储蓄卡");
-        binding.tvBankBalance.setText("￥50,000.00");
+        // binding.tvBankName.setText("中国银行储蓄卡");
+        // binding.tvBankBalance.setText("￥50,000.00");
 
         // 四大功能按钮点击事件
         binding.btnCardManage.setOnClickListener(v ->
@@ -62,8 +86,8 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
         binding.btnIncomeExpense.setOnClickListener(v ->
             ToastUtil.show(getContext(), "跳转到收支")
         );
-        binding.btnAnalysis.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到消费分析")
+        binding.btnTransferRecord.setOnClickListener(v ->
+            ToastUtil.show(getContext(), "跳转到转账记录")
         );
 
         // 设置下拉刷新
@@ -291,6 +315,8 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        // 移除Banner自动轮播回调，防止内存泄漏
+        bannerHandler.removeCallbacks(bannerRunnable);
         binding = null;
     }
 }

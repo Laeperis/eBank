@@ -18,95 +18,68 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- 银行卡选择横滑卡片 -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_bank"
+            <!-- Banner 轮播图 -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/bannerViewPager"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp">
+                android:layout_height="180dp"
+                android:layout_marginBottom="24dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-                    <TextView
-                        android:id="@+id/tv_bank_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="中国银行储蓄卡"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tv_bank_balance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="￥50,000.00"
-                        android:textColor="@android:color/white"
-                        android:textSize="28sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="16dp"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- 四大功能按钮 -->
+            <!-- 四大功能按钮优化为两行，每行两个按钮 -->
             <LinearLayout
-                android:id="@+id/ll_functions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center"
+                android:layout_marginBottom="8dp">
+
+                <ImageButton
+                    android:id="@+id/btn_card_manage"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_menu_gallery"
+                    android:contentDescription="卡片管理"/>
+
+                <ImageButton
+                    android:id="@+id/btn_transfer"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_menu_camera"
+                    android:contentDescription="转账汇款"
+                    android:layout_marginStart="12dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginBottom="24dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_card_manage"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="银行卡管理"
-                    app:icon="@drawable/ic_menu_gallery"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_transfer"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:text="转账汇款"
-                    app:icon="@drawable/ic_menu_camera"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp"
-                    android:layout_marginStart="8dp"/>
-
-                <com.google.android.material.button.MaterialButton
+                <ImageButton
                     android:id="@+id/btn_income_expense"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
-                    android:layout_height="60dp"
+                    android:layout_height="100dp"
                     android:layout_weight="1"
-                    android:text="收支"
-                    app:icon="@drawable/ic_menu_slideshow"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp"
-                    android:layout_marginStart="8dp"/>
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_analyze"
+                    android:contentDescription="收支分析"/>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_analysis"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                <ImageButton
+                    android:id="@+id/btn_transfer_record"
                     android:layout_width="0dp"
-                    android:layout_height="60dp"
+                    android:layout_height="100dp"
                     android:layout_weight="1"
-                    android:text="消费分析"
-                    app:icon="@drawable/ic_camera"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp"
-                    android:layout_marginStart="8dp"/>
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_menu_gallery"
+                    android:contentDescription="转账记录"
+                    android:layout_marginStart="12dp"/>
             </LinearLayout>
 
             <!-- 新闻标题 -->

@@ -45,7 +45,7 @@
                     android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="张三"
+                    android:text="chen"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/black" />
@@ -54,7 +54,7 @@
                     android:id="@+id/tv_user_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="用户代码：ABC123"
+                    android:text="用户代码：233333"
                     android:textSize="14sp"
                     android:textColor="@android:color/darker_gray"
                     android:layout_marginTop="4dp" />
@@ -91,9 +91,10 @@
             android:layout_height="56dp"
             android:text="个人资料"
             android:textColor="@color/black"
-            app:icon="@drawable/ic_menu_gallery"
+            app:icon="@drawable/ic_mine"
             app:iconGravity="textStart"
-            app:iconTint="@color/purple_500" />
+            app:iconTint="@color/purple_500"
+            android:gravity="start|center_vertical" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_security"
@@ -104,18 +105,8 @@
             android:textColor="@color/black"
             app:icon="@drawable/ic_setting"
             app:iconGravity="textStart"
-            app:iconTint="@color/purple_500" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_notification"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="消息通知"
-            android:textColor="@color/black"
-            app:icon="@drawable/ic_menu_slideshow"
-            app:iconGravity="textStart"
-            app:iconTint="@color/purple_500" />
+            app:iconTint="@color/purple_500"
+            android:gravity="start|center_vertical" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_help"
@@ -124,9 +115,10 @@
             android:layout_height="56dp"
             android:text="帮助中心"
             android:textColor="@color/black"
-            app:icon="@drawable/ic_camera"
+            app:icon="@drawable/ic_help"
             app:iconGravity="textStart"
-            app:iconTint="@color/purple_500" />
+            app:iconTint="@color/purple_500"
+            android:gravity="start|center_vertical" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_about"
@@ -135,9 +127,10 @@
             android:layout_height="56dp"
             android:text="关于我们"
             android:textColor="@color/black"
-            app:icon="@drawable/ic_menu_gallery"
+            app:icon="@drawable/ic_about"
             app:iconGravity="textStart"
-            app:iconTint="@color/purple_500" />
+            app:iconTint="@color/purple_500"
+            android:gravity="start|center_vertical" />
 
     </LinearLayout>
 
