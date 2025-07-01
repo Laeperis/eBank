@@ -15,6 +15,8 @@ import android.os.AsyncTask;
 import com.bumptech.glide.Glide;
 import android.net.Uri;
 import com.foxishangxian.ebank.R;
+import android.content.Intent;
+import com.foxishangxian.ebank.SettingsActivity;
 
 public class MineFragment extends Fragment {
 
@@ -32,9 +34,10 @@ public class MineFragment extends Fragment {
         binding.btnProfile.setOnClickListener(v ->
             ToastUtil.show(getContext(), "跳转到个人资料")
         );
-        binding.btnSecurity.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到安全设置")
-        );
+        binding.btnSecurity.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), SettingsActivity.class);
+            startActivity(intent);
+        });
         binding.btnHelp.setOnClickListener(v ->
             ToastUtil.show(getContext(), "跳转到帮助中心")
         );

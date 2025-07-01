@@ -13,6 +13,109 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <LinearLayout
+            android:id="@+id/layout_change_phone"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginTop="16dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+            <TextView
+                android:id="@+id/tv_label_phone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="修改手机号"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:gravity="start|center_vertical" />
+            <TextView
+                android:id="@+id/tv_value_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="188****1234"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:gravity="end|center_vertical" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
+        <LinearLayout
+            android:id="@+id/layout_change_email"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginTop="0dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+            <TextView
+                android:id="@+id/tv_label_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="修改邮箱"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:gravity="start|center_vertical" />
+            <TextView
+                android:id="@+id/tv_value_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="te****@qq.com"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:gravity="end|center_vertical" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
+        <LinearLayout
+            android:id="@+id/layout_change_password"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginTop="0dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+            <TextView
+                android:id="@+id/tv_label_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="修改密码"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:gravity="start|center_vertical" />
+            <TextView
+                android:id="@+id/tv_value_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="******"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:gravity="end|center_vertical" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_logout"
             android:layout_width="match_parent"

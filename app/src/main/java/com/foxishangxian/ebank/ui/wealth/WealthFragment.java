@@ -17,6 +17,10 @@ import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import com.foxishangxian.ebank.data.UserDatabase;
+import com.foxishangxian.ebank.data.User;
+import com.foxishangxian.ebank.data.BankCard;
+import java.util.concurrent.Executors;
 
 public class WealthFragment extends Fragment {
 
@@ -29,8 +33,26 @@ public class WealthFragment extends Fragment {
         binding = FragmentWealthBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // 查询数据库，统计总资产
+        Executors.newSingleThreadExecutor().execute(() -> {
+            UserDatabase db = UserDatabase.getInstance(getContext());
+            User user = db.userDao().getLoggedInUser();
+            double total = 0;
+            if (user != null) {
+                java.util.List<BankCard> cards = db.bankCardDao().getCardsByUserId(user.uid);
+                for (BankCard card : cards) {
+                    total += card.balance;
+                }
+            }
+            double finalTotal = total;
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    binding.tvTotalAssets.setText("总资产：￥" + String.format("%,.2f", finalTotal));
+                });
+            }
+        });
+
         // 设置财富页面内容
-        binding.tvTotalAssets.setText("总资产：￥125,680.00");
         binding.tvTodayEarnings.setText("今日收益：+￥156.80");
         binding.tvTotalEarnings.setText("累计收益：+￥2,680.00");
 
