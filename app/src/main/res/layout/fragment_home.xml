@@ -25,61 +25,169 @@
                 android:layout_height="180dp"
                 android:layout_marginBottom="24dp" />
 
-            <!-- 四大功能按钮优化为两行，每行两个按钮 -->
+            <!-- 四大功能卡片式按钮 2x2 布局 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
-
-                <ImageButton
-                    android:id="@+id/btn_card_manage"
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_menu_gallery"
-                    android:contentDescription="卡片管理"/>
-
-                <ImageButton
-                    android:id="@+id/btn_transfer"
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_menu_camera"
-                    android:contentDescription="转账汇款"
-                    android:layout_marginStart="12dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginBottom="24dp">
 
-                <ImageButton
-                    android:id="@+id/btn_income_expense"
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_analyze"
-                    android:contentDescription="收支分析"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
 
-                <ImageButton
-                    android:id="@+id/btn_transfer_record"
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_menu_gallery"
-                    android:contentDescription="转账记录"
-                    android:layout_marginStart="12dp"/>
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_card_manage"
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
+                        <LinearLayout
+                            android:id="@+id/ll_card_manage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <ImageView
+                                android:id="@+id/iv_card_manage"
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:src="@drawable/ic_card"
+                                android:contentDescription="卡片管理" />
+                            <TextView
+                                android:id="@+id/tv_card_manage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="卡片管理"
+                                android:textSize="18sp"
+                                android:textColor="@color/black"
+                                android:layout_marginStart="20dp"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_transfer"
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
+                        <LinearLayout
+                            android:id="@+id/ll_transfer"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <ImageView
+                                android:id="@+id/iv_transfer"
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:src="@drawable/ic_recharge"
+                                android:contentDescription="转账汇款" />
+                            <TextView
+                                android:id="@+id/tv_transfer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="转账汇款"
+                                android:textSize="18sp"
+                                android:textColor="@color/black"
+                                android:layout_marginStart="20dp"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_income_expense"
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
+                        <LinearLayout
+                            android:id="@+id/ll_income_expense"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <ImageView
+                                android:id="@+id/iv_income_expense"
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:src="@drawable/ic_analyze"
+                                android:contentDescription="收支分析" />
+                            <TextView
+                                android:id="@+id/tv_income_expense"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="收支分析"
+                                android:textSize="18sp"
+                                android:textColor="@color/black"
+                                android:layout_marginStart="20dp"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_transfer_record"
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
+                        <LinearLayout
+                            android:id="@+id/ll_transfer_record"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <ImageView
+                                android:id="@+id/iv_transfer_record"
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:src="@drawable/ic_log"
+                                android:contentDescription="转账记录" />
+                            <TextView
+                                android:id="@+id/tv_transfer_record"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="转账记录"
+                                android:textSize="18sp"
+                                android:textColor="@color/black"
+                                android:layout_marginStart="20dp"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
             </LinearLayout>
 
             <!-- 新闻标题 -->

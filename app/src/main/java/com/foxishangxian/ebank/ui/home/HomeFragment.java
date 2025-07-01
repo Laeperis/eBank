@@ -72,21 +72,17 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
         };
         bannerHandler.postDelayed(bannerRunnable, BANNER_INTERVAL);
 
-        // 绑定银行卡名和金额（可根据实际数据动态设置）
-        // binding.tvBankName.setText("中国银行储蓄卡");
-        // binding.tvBankBalance.setText("￥50,000.00");
-
         // 四大功能按钮点击事件
-        binding.btnCardManage.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到银行卡管理")
+        binding.llCardManage.setOnClickListener(v ->
+            ToastUtil.show(getContext(), "跳转到卡片管理")
         );
-        binding.btnTransfer.setOnClickListener(v ->
+        binding.llTransfer.setOnClickListener(v ->
             ToastUtil.show(getContext(), "跳转到转账汇款")
         );
-        binding.btnIncomeExpense.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到收支")
+        binding.llIncomeExpense.setOnClickListener(v ->
+            ToastUtil.show(getContext(), "跳转到收支分析")
         );
-        binding.btnTransferRecord.setOnClickListener(v ->
+        binding.llTransferRecord.setOnClickListener(v ->
             ToastUtil.show(getContext(), "跳转到转账记录")
         );
 
