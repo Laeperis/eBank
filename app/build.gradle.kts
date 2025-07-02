@@ -10,14 +10,14 @@ android {
         applicationId = "com.foxishangxian.ebank"
         minSdk = 30
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         // 应用信息
         resValue("string", "app_name", "eBank")
-        resValue("string", "app_version", "1.0.0")
+        resValue("string", "app_version", "1.1.0")
         resValue("string", "app_build_time", System.currentTimeMillis().toString())
     }
 
@@ -31,12 +31,12 @@ android {
             
             // 打包配置
             manifestPlaceholders["APP_NAME"] = "eBank"
-            manifestPlaceholders["APP_VERSION"] = "1.0.0"
+            manifestPlaceholders["APP_VERSION"] = "1.1.0"
             manifestPlaceholders["APP_DESCRIPTION"] = "模拟银行应用"
             manifestPlaceholders["APP_AUTHOR"] = "Laeperis"
             
             // 输出文件名配置
-            setProperty("archivesBaseName", "eBank-v1.0.0-${System.currentTimeMillis()}")
+            setProperty("archivesBaseName", "eBank-v1.1.0-${System.currentTimeMillis()}")
         }
         
         debug {
@@ -45,7 +45,7 @@ android {
             versionNameSuffix = "-debug"
             
             // 调试版本输出文件名
-            setProperty("archivesBaseName", "eBank-v1.0.0-debug-${System.currentTimeMillis()}")
+                setProperty("archivesBaseName", "eBank-v1.1.0-debug-${System.currentTimeMillis()}")
         }
     }
     compileOptions {
