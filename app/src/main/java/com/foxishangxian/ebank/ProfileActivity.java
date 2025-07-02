@@ -7,6 +7,23 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.MenuItem;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import android.widget.ImageView;
+
+import androidx.core.content.FileProvider;
+import android.Manifest;
+import android.os.Build;
+import java.io.File;
+import java.io.FileOutputStream;
+import com.yalantis.ucrop.UCrop;
+import android.graphics.drawable.GradientDrawable;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
@@ -15,53 +32,51 @@ import com.foxishangxian.ebank.data.UserDao;
 import com.foxishangxian.ebank.data.UserDatabase;
 import com.foxishangxian.ebank.data.BankCardDao;
 import com.foxishangxian.ebank.databinding.ActivityProfileBinding;
-import com.foxishangxian.ebank.databinding.ContentProfileBinding;
 import com.foxishangxian.ebank.ui.ToastUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textfield.TextInputEditText;
-import android.os.Build;
-import android.view.Window;
-import android.view.WindowManager;
-import androidx.core.content.ContextCompat;
-import com.foxishangxian.ebank.databinding.AppBarProfileBinding;
+
 
 public class ProfileActivity extends AppCompatActivity {
     private ActivityProfileBinding binding;
-    private ContentProfileBinding contentBinding;
-    private AppBarProfileBinding appBarProfileBinding;
     private static final int REQUEST_CODE_PICK_IMAGE = 1001;
+    private static final int REQUEST_CODE_TAKE_PHOTO = 1002;
+    private static final int REQUEST_CODE_CROP_IMAGE = 1003;
+    private static final int REQUEST_CODE_UCROP = 69;
     private User currentUser;
+    private ImageView ivAvatar;
+    private ImageView ivCamera;
+    private File tempPhotoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 设置状态栏颜色与主页一致
-        Window window = getWindow();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(ContextCompat.getColor(this, R.color.purple_700));
-        }
+
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // 绑定 app_bar_profile
-        appBarProfileBinding = AppBarProfileBinding.bind(findViewById(R.id.app_bar_profile));
-        // 绑定内容
-        contentBinding = ContentProfileBinding.bind(appBarProfileBinding.getRoot().findViewById(R.id.content_profile_root));
-
-        setSupportActionBar(appBarProfileBinding.toolbar);
+        // 设置Toolbar
+        setSupportActionBar(binding.appBarProfile.toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("个人资料");
         }
-        appBarProfileBinding.toolbar.setNavigationOnClickListener(v -> finish());
 
-        contentBinding.layoutAvatar.setOnClickListener(v -> pickAvatar());
-        contentBinding.layoutUsername.setOnClickListener(v -> showEditUsernameDialog());
+        // 初始化头像相关视图
+        ivAvatar = findViewById(R.id.iv_avatar);
+        ivCamera = findViewById(R.id.iv_camera);
+        
+        // 设置头像点击事件
+        View.OnClickListener avatarClickListener = v -> showAvatarDialog();
+        ivAvatar.setOnClickListener(avatarClickListener);
+        ivCamera.setOnClickListener(avatarClickListener);
+        
+        // 设置用户名点击事件
+        findViewById(R.id.layout_username).setOnClickListener(v -> showEditUsernameDialog());
 
-        loadProfile();
+        // 获取当前用户信息并显示
+        new android.os.Handler().postDelayed(this::loadProfile, 100);
     }
 
     private void loadProfile() {
@@ -74,37 +89,177 @@ public class ProfileActivity extends AppCompatActivity {
                 if (currentUser != null) {
                     // 头像
                     if (!TextUtils.isEmpty(currentUser.avatarUri)) {
-                        Glide.with(this).load(Uri.parse(currentUser.avatarUri)).circleCrop().into(contentBinding.ivAvatar);
+                        Glide.with(this).load(Uri.parse(currentUser.avatarUri)).circleCrop().into(ivAvatar);
                     } else {
-                        contentBinding.ivAvatar.setImageResource(R.drawable.ic_avatar_circle_bg);
+                        ivAvatar.setImageResource(R.drawable.ic_avatar_circle_bg);
                     }
                     // 用户名
-                    contentBinding.tvUsername.setText(currentUser.username);
+                    ((android.widget.TextView)findViewById(R.id.tv_username)).setText(currentUser.username);
                     // 用户代码
-                    contentBinding.tvUserCode.setText(currentUser.userCode);
+                    ((android.widget.TextView)findViewById(R.id.tv_user_code)).setText(currentUser.userCode);
                     // 银行卡数量
-                    contentBinding.tvCardCount.setText(String.valueOf(cardCount));
+                    ((android.widget.TextView)findViewById(R.id.tv_card_count)).setText(String.valueOf(cardCount));
                 }
             });
         });
     }
 
-    private void pickAvatar() {
+    private void showAvatarDialog() {
+        String[] options = {"拍照", "从相册选择", "查看头像", "使用默认头像"};
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("选择头像")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        // 拍照
+                        takePhoto();
+                    } else if (which == 1) {
+                        // 相册
+                        pickImage();
+                    } else if (which == 2) {
+                        // 查看头像
+                        showCurrentAvatar();
+                    } else {
+                        // 默认头像
+                        currentUser.avatarUri = null;
+                        ivAvatar.setImageResource(R.drawable.ic_avatar_circle_bg);
+                        // 保存到数据库
+                        AsyncTask.execute(() -> {
+                            UserDatabase.getInstance(this).userDao().update(currentUser);
+                        });
+                    }
+                })
+                .show();
+    }
+
+    private void pickImage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_CODE_PICK_IMAGE);
+                return;
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_PICK_IMAGE);
+                return;
+            }
+        }
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
+    }
+
+    private void takePhoto() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_TAKE_PHOTO);
+            return;
+        }
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        tempPhotoFile = new File(getExternalFilesDir(null), "avatar_temp_" + System.currentTimeMillis() + ".jpg");
+        Uri photoUri = FileProvider.getUriForFile(this, "com.foxishangxian.ebank.fileprovider", tempPhotoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO);
+    }
+
+    private void showCurrentAvatar() {
+        // 创建ImageView用于显示头像
+        ImageView imageView = new ImageView(this);
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int imageSize = (int) (screenWidth * 0.6); // 使用屏幕宽度的60%
+        
+        android.view.ViewGroup.LayoutParams params = new android.view.ViewGroup.LayoutParams(
+                imageSize, imageSize);
+        imageView.setLayoutParams(params);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        // 设置图片
+        if (currentUser != null && !TextUtils.isEmpty(currentUser.avatarUri)) {
+            Glide.with(this)
+                    .load(Uri.parse(currentUser.avatarUri))
+                    .into(imageView);
+        } else {
+            imageView.setImageResource(R.drawable.ic_avatar_circle_bg);
+        }
+
+        // 创建对话框
+        AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                .setTitle("当前头像")
+                .setView(imageView)
+                .setPositiveButton("保存到相册", (dialogInterface, which) -> {
+                    if (currentUser != null && !TextUtils.isEmpty(currentUser.avatarUri)) {
+                        saveAvatarToGallery(Uri.parse(currentUser.avatarUri));
+                    } else {
+                        ToastUtil.show(this, "当前使用的是默认头像，无法保存");
+                    }
+                })
+                .setNegativeButton("关闭", null)
+                .create();
+        
+        dialog.show();
+        
+        // 调整对话框大小，确保图片完全显示
+        dialog.getWindow().setLayout(
+                imageSize + 100, // 图片宽度 + 边距
+                imageSize + 200); // 图片高度 + 标题和按钮高度
+    }
+
+    private void saveAvatarToGallery(Uri avatarUri) {
+        AsyncTask.execute(() -> {
+            try {
+                // 创建保存文件
+                String fileName = "avatar_" + System.currentTimeMillis() + ".jpg";
+                File galleryFile = new File(getExternalFilesDir(null), fileName);
+                
+                // 复制文件
+                java.io.InputStream inputStream = getContentResolver().openInputStream(avatarUri);
+                java.io.FileOutputStream outputStream = new FileOutputStream(galleryFile);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
+                inputStream.close();
+                outputStream.close();
+
+                // 通知媒体扫描器
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                mediaScanIntent.setData(Uri.fromFile(galleryFile));
+                sendBroadcast(mediaScanIntent);
+
+                runOnUiThread(() -> {
+                    ToastUtil.show(this, "头像已保存到相册");
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> {
+                    ToastUtil.show(this, "保存失败：" + e.getMessage());
+                });
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == RESULT_OK && data != null) {
-            Uri uri = data.getData();
-            if (uri != null && currentUser != null) {
-                currentUser.avatarUri = uri.toString();
-                AsyncTask.execute(() -> {
-                    UserDatabase.getInstance(this).userDao().update(currentUser);
-                    runOnUiThread(this::loadProfile);
-                });
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_PICK_IMAGE && data != null) {
+                Uri sourceUri = data.getData();
+                if (sourceUri != null) {
+                    startUCrop(sourceUri);
+                }
+            } else if (requestCode == REQUEST_CODE_TAKE_PHOTO) {
+                if (tempPhotoFile != null && tempPhotoFile.exists()) {
+                    Uri uri = FileProvider.getUriForFile(this, "com.foxishangxian.ebank.fileprovider", tempPhotoFile);
+                    startUCrop(uri);
+                }
+            } else if (requestCode == REQUEST_CODE_UCROP) {
+                final Uri resultUri = UCrop.getOutput(data);
+                if (resultUri != null && currentUser != null) {
+                    currentUser.avatarUri = resultUri.toString();
+                    Glide.with(this).load(resultUri).circleCrop().into(ivAvatar);
+                    // 保存到数据库
+                    AsyncTask.execute(() -> {
+                        UserDatabase.getInstance(this).userDao().update(currentUser);
+                    });
+                }
             }
         }
     }
@@ -131,5 +286,42 @@ public class ProfileActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("取消", null)
                 .show();
+    }
+
+    private void startUCrop(Uri sourceUri) {
+        File cropFile = new File(getExternalFilesDir(null), "avatar_crop_" + System.currentTimeMillis() + ".jpg");
+        Uri cropUri = FileProvider.getUriForFile(this, "com.foxishangxian.ebank.fileprovider", cropFile);
+        UCrop.Options options = new UCrop.Options();
+        options.setCircleDimmedLayer(true);
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        options.setCompressionQuality(90);
+        options.setHideBottomControls(true);
+        options.setStatusBarColor(getResources().getColor(R.color.white));
+        options.setActiveControlsWidgetColor(getResources().getColor(R.color.purple_500));
+        options.setToolbarWidgetColor(getResources().getColor(R.color.black));
+        UCrop.of(sourceUri, cropUri)
+                .withAspectRatio(1, 1)
+                .withMaxResultSize(300, 300)
+                .withOptions(options)
+                .start(this, REQUEST_CODE_UCROP);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 保证头像始终圆形显示
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.OVAL);
+        shape.setColor(0xFFE3F2FD); // 浅蓝色背景
+        ivAvatar.setBackground(shape);
     }
 } 

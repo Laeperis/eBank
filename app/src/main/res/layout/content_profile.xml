@@ -12,36 +12,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        tools:ignore="MissingConstraints">
 
-        <LinearLayout
-            android:id="@+id/layout_avatar"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="?attr/selectableItemBackground"
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
+            android:layout_marginBottom="24dp">
             <ImageView
                 android:id="@+id/iv_avatar"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/ic_avatar_circle_bg"
-                android:background="@drawable/ic_avatar_circle_bg" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="修改头像"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginStart="16dp" />
-        </LinearLayout>
+                android:background="@drawable/ic_avatar_circle_bg"
+                android:scaleType="centerCrop" />
+            <ImageView
+                android:id="@+id/iv_camera"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_camera"
+                android:background="@drawable/bg_toast"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="4dp" />
+        </FrameLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
+            android:alpha="0.3"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" />
         <LinearLayout
@@ -66,12 +66,19 @@
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_chevron_right"
+                android:alpha="0.6" />
         </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
+            android:alpha="0.3"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" />
         <LinearLayout
@@ -94,12 +101,19 @@
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_vertical_line"
+                android:alpha="0.6" />
         </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"
+            android:alpha="0.3"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" />
         <LinearLayout
@@ -122,8 +136,21 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_vertical_line"
+                android:alpha="0.6" />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:alpha="0.3"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout> 
