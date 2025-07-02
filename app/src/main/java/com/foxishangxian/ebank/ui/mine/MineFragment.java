@@ -18,6 +18,7 @@ import com.foxishangxian.ebank.R;
 import android.content.Intent;
 import com.foxishangxian.ebank.SettingsActivity;
 import com.foxishangxian.ebank.ProfileActivity;
+import android.net.Uri;
 
 public class MineFragment extends Fragment {
 
@@ -40,12 +41,22 @@ public class MineFragment extends Fragment {
             Intent intent = new Intent(getActivity(), SettingsActivity.class);
             startActivity(intent);
         });
-        binding.btnHelp.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到帮助中心")
-        );
-        binding.btnAbout.setOnClickListener(v ->
-            ToastUtil.show(getContext(), "跳转到关于我们")
-        );
+        binding.btnHelp.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Laeperis/eBank/issues"));
+                startActivity(intent);
+            } catch (Exception e) {
+                ToastUtil.show(getContext(), "无法打开帮助中心");
+            }
+        });
+        binding.btnAbout.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Laeperis/eBank"));
+                startActivity(intent);
+            } catch (Exception e) {
+                ToastUtil.show(getContext(), "无法打开关于我们");
+            }
+        });
 
         return root;
     }
