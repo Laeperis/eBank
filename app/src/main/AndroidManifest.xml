@@ -52,6 +52,9 @@
         <activity 
             android:name=".ProfileActivity"
             android:theme="@style/Theme.EBank.NoActionBar" />
+        <activity android:name=".AdminUserManageActivity" />
+        <activity android:name=".AdminCardManageActivity" />
+        <activity android:name=".AdminTransferManageActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.foxishangxian.ebank.fileprovider"

@@ -46,11 +46,18 @@ public class LoginActivity extends AppCompatActivity {
         btnToRegister = findViewById(R.id.btnToRegister);
         spinnerAccountList = findViewById(R.id.spinnerAccountList);
 
+        // 创建默认管理员账户
+        createDefaultAdmin();
+
         // 加载历史账号
         AsyncTask.execute(() -> {
-            List<User> users = userDao.getAllUsers();
+            List<User> allUsers = userDao.getAllUsers();
+            // 过滤掉管理员账户，只显示普通用户
+            List<User> normalUsers = allUsers.stream()
+                .filter(user -> !user.isAdmin)
+                .collect(java.util.stream.Collectors.toList());
             runOnUiThread(() -> {
-                AccountDropdownAdapter adapter = new AccountDropdownAdapter(this, users);
+                AccountDropdownAdapter adapter = new AccountDropdownAdapter(this, normalUsers);
                 spinnerAccountList.setAdapter(adapter);
                 spinnerAccountList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -120,6 +127,26 @@ public class LoginActivity extends AppCompatActivity {
                     ToastUtil.show(LoginActivity.this, getString(R.string.press_again_exit));
                     lastBackPressedTime = now;
                 }
+            }
+        });
+    }
+
+    private void createDefaultAdmin() {
+        AsyncTask.execute(() -> {
+            // 检查是否已存在管理员账户
+            User adminUser = userDao.getUserByUsername("root");
+            if (adminUser == null) {
+                // 创建默认管理员账户
+                User admin = new User(
+                    UUID.randomUUID().toString(),
+                    "root",
+                    "root",
+                    "admin@ebank.com",
+                    "13800000000",
+                    "ADMIN001"
+                );
+                admin.isAdmin = true;
+                userDao.insert(admin);
             }
         });
     }

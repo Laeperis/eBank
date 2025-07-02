@@ -33,6 +33,7 @@ import com.foxishangxian.ebank.ui.ToastUtil;
 import com.foxishangxian.ebank.data.BankCard;
 import com.foxishangxian.ebank.data.TransferRecord;
 import com.foxishangxian.ebank.data.TransferRecordDao;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                                         double amount = 1 + (9999 - 1) * random.nextDouble();
                                         long time = startTime + (long) (random.nextDouble() * (endTime - startTime));
                                         TransferRecord record = new TransferRecord();
+                                        record.id = UUID.randomUUID().toString();
                                         record.fromCard = fromCard;
                                         record.toCard = toCard;
                                         record.amount = Math.round(amount * 100.0) / 100.0;

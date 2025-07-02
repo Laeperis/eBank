@@ -32,8 +32,8 @@ public class CardDetailActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
-        int cardId = getIntent().getIntExtra("cardId", -1);
-        if (cardId != -1) {
+        String cardId = getIntent().getStringExtra("cardId");
+        if (cardId != null) {
             AsyncTask.execute(() -> {
                 BankCard card = UserDatabase.getInstance(this).bankCardDao().getCardById(cardId);
                 runOnUiThread(() -> {

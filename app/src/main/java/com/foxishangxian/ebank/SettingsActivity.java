@@ -18,10 +18,12 @@ import android.widget.EditText;
 import android.text.TextUtils;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textfield.TextInputEditText;
+import android.view.View;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private ActivitySettingsBinding binding;
+    private boolean isAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,23 @@ public class SettingsActivity extends AppCompatActivity {
         findViewById(R.id.layout_change_email).setOnClickListener(v -> showChangeDialog("修改邮箱", "请输入新邮箱", "email"));
         findViewById(R.id.layout_change_password).setOnClickListener(v -> showChangeDialog("修改密码", "请输入新密码", "password"));
         findViewById(R.id.btn_logout).setOnClickListener(v -> logout());
+
+        // 设置管理员选项点击事件
+        findViewById(R.id.layout_manage_users).setOnClickListener(v -> {
+            if (isAdmin) {
+                startActivity(new Intent(this, AdminUserManageActivity.class));
+            }
+        });
+        findViewById(R.id.layout_manage_cards).setOnClickListener(v -> {
+            if (isAdmin) {
+                startActivity(new Intent(this, AdminCardManageActivity.class));
+            }
+        });
+        findViewById(R.id.layout_manage_transfers).setOnClickListener(v -> {
+            if (isAdmin) {
+                startActivity(new Intent(this, AdminTransferManageActivity.class));
+            }
+        });
     }
 
     private void refreshUserInfo() {
@@ -66,10 +85,21 @@ public class SettingsActivity extends AppCompatActivity {
             String email = user.email;
             String phoneMasked = maskPhone(phone);
             String emailMasked = maskEmail(email);
+            boolean admin = user.isAdmin;
             runOnUiThread(() -> {
                 ((android.widget.TextView)findViewById(R.id.tv_value_phone)).setText(phoneMasked);
                 ((android.widget.TextView)findViewById(R.id.tv_value_email)).setText(emailMasked);
                 ((android.widget.TextView)findViewById(R.id.tv_value_password)).setText("******");
+                
+                // 显示或隐藏管理员选项
+                View adminSection = findViewById(R.id.admin_section);
+                if (admin) {
+                    adminSection.setVisibility(View.VISIBLE);
+                    isAdmin = true;
+                } else {
+                    adminSection.setVisibility(View.GONE);
+                    isAdmin = false;
+                }
             });
         });
     }

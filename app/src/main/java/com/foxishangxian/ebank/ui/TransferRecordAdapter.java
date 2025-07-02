@@ -15,6 +15,7 @@ public class TransferRecordAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int TYPE_SECTION = 0;
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_LOAD_MORE = 2;
+    private static final int TYPE_NO_MORE = 3;
     private List<RecordDisplayItem> data = new ArrayList<>();
     private Map<String, String> cardUserNameMap = new HashMap<>();
     private boolean hasMore = true;
@@ -37,7 +38,9 @@ public class TransferRecordAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemViewType(int position) {
-        if (position == data.size()) return TYPE_LOAD_MORE;
+        if (position >= data.size()) {
+            return hasMore ? TYPE_LOAD_MORE : TYPE_NO_MORE;
+        }
         return data.get(position).isSection ? TYPE_SECTION : TYPE_ITEM;
     }
 
@@ -50,6 +53,9 @@ public class TransferRecordAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         } else if (viewType == TYPE_LOAD_MORE) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_loading_more, parent, false);
             return new RecyclerView.ViewHolder(v) {};
+        } else if (viewType == TYPE_NO_MORE) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_no_more, parent, false);
+            return new RecyclerView.ViewHolder(v) {};
         } else {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transfer_record, parent, false);
             return new ItemHolder(v);
@@ -58,7 +64,11 @@ public class TransferRecordAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position) == TYPE_LOAD_MORE) return;
+        int viewType = getItemViewType(position);
+        if (viewType == TYPE_LOAD_MORE || viewType == TYPE_NO_MORE) return;
+        
+        if (position >= data.size()) return; // 防止数组越界
+        
         RecordDisplayItem item = data.get(position);
         if (item.isSection) {
             ((SectionHolder) holder).tvSection.setText(item.sectionTitle);
@@ -75,7 +85,7 @@ public class TransferRecordAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return data.size() + (hasMore ? 1 : 0);
+        return data.size() + 1; // 总是显示一个额外的item（加载中或没有更多）
     }
 
     static class SectionHolder extends RecyclerView.ViewHolder {

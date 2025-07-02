@@ -6,7 +6,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {User.class, BankCard.class, TransferRecord.class}, version = 5, exportSchema = false)
+@Database(entities = {User.class, BankCard.class, TransferRecord.class}, version = 6, exportSchema = false)
 public abstract class UserDatabase extends RoomDatabase {
     private static volatile UserDatabase INSTANCE;
 

@@ -54,6 +54,13 @@ public class CardManageActivity extends AppCompatActivity implements CardManageA
                     cardList.clear();
                     cardList.addAll(cards);
                     adapter.notifyDataSetChanged();
+                    
+                    // 显示调试信息
+                    if (cards.isEmpty()) {
+                        ToastUtil.show(this, "当前用户UID: " + user.uid + "\n未找到银行卡，请确保管理员添加银行卡时使用了正确的用户ID");
+                    } else {
+                        ToastUtil.show(this, "找到 " + cards.size() + " 张银行卡");
+                    }
                 });
             }
         });

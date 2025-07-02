@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_from_user_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="转出用户ID（可在用户管理页面查看）"
+        style="@style/Theme.EBank.Admin.TextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_from_user_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textCursorDrawable="@color/purple_500" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_to_user_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="转入用户ID（可在用户管理页面查看）"
+        android:layout_marginTop="16dp"
+        style="@style/Theme.EBank.Admin.TextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_to_user_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textCursorDrawable="@color/purple_500" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="金额"
+        android:layout_marginTop="16dp"
+        style="@style/Theme.EBank.Admin.TextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:textCursorDrawable="@color/purple_500" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="描述"
+        android:layout_marginTop="16dp"
+        style="@style/Theme.EBank.Admin.TextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:maxLines="3"
+            android:textCursorDrawable="@color/purple_500" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="状态"
+        android:layout_marginTop="16dp"
+        style="@style/Theme.EBank.Admin.TextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textCursorDrawable="@color/purple_500" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_transfer_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="转账时间（留空则使用当前时间）"
+        android:layout_marginTop="16dp"
+        style="@style/Theme.EBank.Admin.TextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_transfer_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textCursorDrawable="@color/purple_500" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout> 

@@ -295,14 +295,12 @@ public class TransferRecordActivity extends AppCompatActivity {
             }
             // 只保留第一页数据
             List<TransferRecordAdapter.RecordDisplayItem> pageList = new ArrayList<>();
-            int count = 0;
-            for (TransferRecordAdapter.RecordDisplayItem item : displayList) {
-                pageList.add(item);
-                if (!item.isSection) count++;
-                if (count >= pageSize) break;
+            int endIndex = Math.min(pageSize, displayList.size());
+            for (int i = 0; i < endIndex; i++) {
+                pageList.add(displayList.get(i));
             }
             allDisplayList = new ArrayList<>(displayList); // 保存全部，后续分页用
-            hasMore = count < displayList.size();
+            hasMore = endIndex < displayList.size();
             currentPage = 1;
             runOnUiThread(() -> {
                 adapter.setCardUserNameMap(cardUserNameMap);
@@ -332,16 +330,17 @@ public class TransferRecordActivity extends AppCompatActivity {
         new Thread(() -> {
             // 取下一页数据
             List<TransferRecordAdapter.RecordDisplayItem> nextPage = new ArrayList<>();
-            int count = 0, realCount = 0;
-            for (int i = 0, n = 0; i < allDisplayList.size() && n < (currentPage + 1) * pageSize; i++) {
+            int count = 0;
+            int startIndex = currentPage * pageSize;
+            int endIndex = Math.min((currentPage + 1) * pageSize, allDisplayList.size());
+            
+            for (int i = startIndex; i < endIndex; i++) {
                 TransferRecordAdapter.RecordDisplayItem item = allDisplayList.get(i);
-                if (!item.isSection) n++;
-                if (n > currentPage * pageSize) {
-                    nextPage.add(item);
-                    if (!item.isSection) count++;
-                }
+                nextPage.add(item);
+                if (!item.isSection) count++;
             }
-            hasMore = (currentPage + 1) * pageSize < getRealItemCount(allDisplayList);
+            
+            hasMore = endIndex < allDisplayList.size();
             currentPage++;
             runOnUiThread(() -> {
                 adapter.appendData(nextPage);

@@ -123,6 +123,7 @@ public class TransferActivity extends AppCompatActivity {
                                 toCard.balance += amount;
                                 db.bankCardDao().update(toCard);
                                 com.foxishangxian.ebank.data.TransferRecord record = new com.foxishangxian.ebank.data.TransferRecord();
+                                record.id = java.util.UUID.randomUUID().toString();
                                 record.fromCard = selectedCard.cardNumber;
                                 record.toCard = targetCard;
                                 record.time = System.currentTimeMillis();
