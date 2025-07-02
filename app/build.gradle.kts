@@ -11,9 +11,14 @@ android {
         minSdk = 30
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        // 应用信息
+        resValue("string", "app_name", "eBank")
+        resValue("string", "app_version", "1.0.0")
+        resValue("string", "app_build_time", System.currentTimeMillis().toString())
     }
 
     buildTypes {
@@ -23,6 +28,24 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            
+            // 打包配置
+            manifestPlaceholders["APP_NAME"] = "eBank"
+            manifestPlaceholders["APP_VERSION"] = "1.0.0"
+            manifestPlaceholders["APP_DESCRIPTION"] = "模拟银行应用"
+            manifestPlaceholders["APP_AUTHOR"] = "Laeperis"
+            
+            // 输出文件名配置
+            setProperty("archivesBaseName", "eBank-v1.0.0-${System.currentTimeMillis()}")
+        }
+        
+        debug {
+            // 调试版本配置
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+            
+            // 调试版本输出文件名
+            setProperty("archivesBaseName", "eBank-v1.0.0-debug-${System.currentTimeMillis()}")
         }
     }
     compileOptions {
@@ -55,4 +78,17 @@ dependencies {
     implementation("com.github.yalantis:ucrop:2.2.8")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+}
+
+// 生成版本信息任务
+android.applicationVariants.all {
+    val variant = this
+    variant.outputs.all {
+        val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+        val outputFile = output.outputFile
+        if (outputFile != null && outputFile.name.endsWith(".apk")) {
+            val fileName = "eBank-${variant.versionName}-${variant.buildType.name}-${System.currentTimeMillis()}.apk"
+            output.outputFileName = fileName
+        }
+    }
 }
