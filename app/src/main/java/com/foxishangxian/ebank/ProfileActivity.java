@@ -37,18 +37,33 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textfield.TextInputEditText;
 
-
+// ProfileActivity：用户个人信息界面Activity
+// 负责展示和编辑用户的个人资料，包括头像、用户名、用户代码、银行卡数量等信息
+// 支持头像更换（拍照、相册、默认）、用户名修改、头像保存到相册等功能
+// 涉及权限申请、图片裁剪、数据库操作等常见Android开发场景
 public class ProfileActivity extends AppCompatActivity {
+    // 视图绑定对象，绑定activity_profile.xml布局
     private ActivityProfileBinding binding;
+    // 选择图片请求码
     private static final int REQUEST_CODE_PICK_IMAGE = 1001;
+    // 拍照请求码
     private static final int REQUEST_CODE_TAKE_PHOTO = 1002;
+    // 裁剪图片请求码（未使用）
     private static final int REQUEST_CODE_CROP_IMAGE = 1003;
+    // uCrop库裁剪请求码
     private static final int REQUEST_CODE_UCROP = 69;
+    // 当前登录用户对象
     private User currentUser;
+    // 头像ImageView
     private ImageView ivAvatar;
+    // 相机按钮ImageView
     private ImageView ivCamera;
+    // 拍照临时文件
     private File tempPhotoFile;
 
+    /**
+     * Activity创建时回调，初始化界面、事件、加载用户信息
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,18 +82,22 @@ public class ProfileActivity extends AppCompatActivity {
         ivAvatar = findViewById(R.id.iv_avatar);
         ivCamera = findViewById(R.id.iv_camera);
         
-        // 设置头像点击事件
+        // 设置头像和相机按钮点击事件，弹出头像操作对话框
         View.OnClickListener avatarClickListener = v -> showAvatarDialog();
         ivAvatar.setOnClickListener(avatarClickListener);
         ivCamera.setOnClickListener(avatarClickListener);
         
-        // 设置用户名点击事件
+        // 设置用户名区域点击事件，弹出修改用户名对话框
         findViewById(R.id.layout_username).setOnClickListener(v -> showEditUsernameDialog());
 
-        // 获取当前用户信息并显示
+        // 延迟加载用户信息，避免界面未初始化完成
         new android.os.Handler().postDelayed(this::loadProfile, 100);
     }
 
+    /**
+     * 加载当前用户信息并显示到界面
+     * 包括头像、用户名、用户代码、银行卡数量
+     */
     private void loadProfile() {
         AsyncTask.execute(() -> {
             UserDao userDao = UserDatabase.getInstance(this).userDao();
@@ -104,6 +123,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 弹出头像操作对话框，支持拍照、相册、查看、恢复默认
+     */
     private void showAvatarDialog() {
         String[] options = {"拍照", "从相册选择", "查看头像", "使用默认头像"};
         new MaterialAlertDialogBuilder(this)
@@ -131,6 +153,9 @@ public class ProfileActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * 打开系统相册选择图片，动态申请权限
+     */
     private void pickImage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
@@ -147,6 +172,9 @@ public class ProfileActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
     }
 
+    /**
+     * 打开系统相机拍照，动态申请权限，保存临时图片
+     */
     private void takePhoto() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_TAKE_PHOTO);
@@ -160,6 +188,9 @@ public class ProfileActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO);
     }
 
+    /**
+     * 查看当前头像大图，并可保存到相册
+     */
     private void showCurrentAvatar() {
         // 创建ImageView用于显示头像
         ImageView imageView = new ImageView(this);
@@ -202,6 +233,10 @@ public class ProfileActivity extends AppCompatActivity {
                 imageSize + 200); // 图片高度 + 标题和按钮高度
     }
 
+    /**
+     * 将头像图片保存到本地相册
+     * @param avatarUri 头像图片的Uri
+     */
     private void saveAvatarToGallery(Uri avatarUri) {
         AsyncTask.execute(() -> {
             try {
@@ -236,6 +271,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 处理拍照、相册、裁剪等Activity返回结果
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -264,6 +302,9 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 弹出修改用户名对话框，输入新用户名并保存
+     */
     private void showEditUsernameDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_single, null);
         TextInputLayout til = dialogView.findViewById(R.id.til_single);
@@ -288,6 +329,10 @@ public class ProfileActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * 启动uCrop库进行头像裁剪，裁剪为圆形并压缩
+     * @param sourceUri 原始图片Uri
+     */
     private void startUCrop(Uri sourceUri) {
         File cropFile = new File(getExternalFilesDir(null), "avatar_crop_" + System.currentTimeMillis() + ".jpg");
         Uri cropUri = FileProvider.getUriForFile(this, "com.foxishangxian.ebank.fileprovider", cropFile);
@@ -306,6 +351,9 @@ public class ProfileActivity extends AppCompatActivity {
                 .start(this, REQUEST_CODE_UCROP);
     }
 
+    /**
+     * 处理Toolbar返回按钮点击事件
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -315,6 +363,9 @@ public class ProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * onResume时保证头像始终为圆形背景
+     */
     @Override
     protected void onResume() {
         super.onResume();

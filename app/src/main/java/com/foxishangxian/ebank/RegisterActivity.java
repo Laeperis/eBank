@@ -1,3 +1,5 @@
+// RegisterActivity：注册界面Activity
+// 主要负责新用户注册、头像选择、跳转登录、注册成功后自动登录等功能
 package com.foxishangxian.ebank;
 
 import android.content.Intent;
@@ -37,19 +39,25 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class RegisterActivity extends AppCompatActivity {
+    // 头像选择相关常量
     private static final int REQUEST_CODE_PICK_IMAGE = 1001;
     private static final int REQUEST_CODE_TAKE_PHOTO = 1002;
     private static final int REQUEST_CODE_CROP_IMAGE = 1003;
     private static final int REQUEST_CODE_UCROP = 69;
+    // 头像Uri
     private Uri avatarUri = null;
+    // 头像ImageView
     private ImageView ivAvatar;
+    // 相机按钮
     private ImageView ivCamera;
+    // 临时拍照文件
     private File tempPhotoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        // 初始化控件
         EditText etUsername = findViewById(R.id.etUsername);
         EditText etPassword = findViewById(R.id.etPassword);
         EditText etEmail = findViewById(R.id.etEmail);
@@ -59,14 +67,17 @@ public class RegisterActivity extends AppCompatActivity {
         UserDao userDao = UserDatabase.getInstance(this).userDao();
         ivAvatar = findViewById(R.id.ivAvatar);
         ivCamera = findViewById(R.id.ivCamera);
+        // 头像点击事件，弹出选择对话框
         View.OnClickListener avatarClickListener = v -> showAvatarDialog();
         ivAvatar.setOnClickListener(avatarClickListener);
         ivCamera.setOnClickListener(avatarClickListener);
+        // 注册按钮点击事件
         btnRegister.setOnClickListener(v -> {
             String username = etUsername.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             String phone = etPhone.getText().toString().trim();
+            // 校验输入
             if (username.isEmpty() || password.isEmpty()) {
                 ToastUtil.show(this, getString(R.string.empty_username_or_password));
                 return;
@@ -87,12 +98,14 @@ public class RegisterActivity extends AppCompatActivity {
                 ToastUtil.show(this, getString(R.string.invalid_phone));
                 return;
             }
+            // 异步注册逻辑
             AsyncTask.execute(() -> {
                 if (userDao.getUserByUsername(username) != null) {
                     runOnUiThread(() -> ToastUtil.show(this, getString(R.string.register_failed)));
                 } else {
                     userDao.logoutAll();
                     String userCode = generateUserCode(userDao);
+                    // 创建新用户对象
                     User user = new User(UUID.randomUUID().toString(), username, password, email, phone, userCode);
                     user.isLoggedIn = true;
                     user.avatarUri = avatarUri == null ? null : avatarUri.toString();
@@ -109,18 +122,21 @@ public class RegisterActivity extends AppCompatActivity {
                     bankCardDao.insert(card);
                     runOnUiThread(() -> {
                         ToastUtil.show(this, getString(R.string.register_success));
+                        // 注册成功跳转主界面
                         startActivity(new Intent(this, MainActivity.class));
                         finish();
                     });
                 }
             });
         });
+        // 跳转登录按钮点击事件
         btnToLogin.setOnClickListener(v -> {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         });
     }
 
+    // 头像选择弹窗
     private void showAvatarDialog() {
         String[] options = {"拍照", "从相册选择", "使用默认头像"};
         new AlertDialog.Builder(this)
@@ -141,6 +157,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .show();
     }
 
+    // 从相册选择图片
     private void pickImage() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
@@ -157,6 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
     }
 
+    // 拍照获取图片
     private void takePhoto() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_TAKE_PHOTO);
@@ -194,6 +212,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    // 启动UCrop裁剪图片
     private void startUCrop(Uri sourceUri) {
         File cropFile = new File(getExternalFilesDir(null), "avatar_crop_" + System.currentTimeMillis() + ".jpg");
         Uri cropUri = FileProvider.getUriForFile(this, "com.foxishangxian.ebank.fileprovider", cropFile);
@@ -230,6 +249,7 @@ public class RegisterActivity extends AppCompatActivity {
         ivAvatar.setBackground(shape);
     }
 
+    // 生成唯一用户编码
     private String generateUserCode(UserDao userDao) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         java.util.Random random = new java.util.Random();
@@ -244,6 +264,7 @@ public class RegisterActivity extends AppCompatActivity {
         return code;
     }
 
+    // 生成银行卡号
     private String generateCardNumber() {
         StringBuilder sb = new StringBuilder();
         sb.append("6222");

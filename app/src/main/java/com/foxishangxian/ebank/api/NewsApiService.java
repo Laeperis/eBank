@@ -1,3 +1,5 @@
+// NewsApiService：新闻API服务类
+// 负责从网络获取财经新闻数据，支持真实API和模拟数据两种模式
 package com.foxishangxian.ebank.api;
 
 import android.os.AsyncTask;
@@ -25,30 +27,31 @@ public class NewsApiService {
     private static final String API_URL = "https://whyta.cn/api/wallstreetcn";
     private static final String API_KEY = "36de5db81215";
     
-    // 备用方案：使用模拟数据
+    // 是否使用模拟数据（true为模拟，false为真实API）
     private static final boolean USE_MOCK_DATA = false; // 改为false以使用真实API
 
+    // 新闻回调接口
     public interface NewsCallback {
-        void onSuccess(List<NewsItem> newsList);
-        void onError(String error);
+        void onSuccess(List<NewsItem> newsList); // 成功回调，返回新闻列表
+        void onError(String error); // 失败回调，返回错误信息
     }
 
+    // 获取新闻（默认从offset=0开始）
     public static void fetchNews(String category, NewsCallback callback) {
         fetchNews(category, 0, callback);
     }
 
+    // 获取新闻（支持分页）
     public static void fetchNews(String category, int offset, NewsCallback callback) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
             StringBuilder response = new StringBuilder();
             String urlString = null;
             try {
-                // 华尔街见闻API的URL构建方式
-                // 注意：如果API不支持offset参数，我们可能需要使用其他方式实现分页
+                // 构建API请求URL，支持分页参数
                 if (offset == 0) {
                     urlString = API_URL + "?key=" + API_KEY + "&limit=10";
                 } else {
-                    // 如果API支持offset，使用offset参数
                     urlString = API_URL + "?key=" + API_KEY + "&limit=10&offset=" + offset;
                 }
                 
@@ -78,7 +81,7 @@ public class NewsApiService {
                 System.out.println("API Response: " + response.toString());
                 System.out.println("API调用成功，开始解析数据...");
 
-                // 解析华尔街见闻API的JSON响应
+                // 解析API返回的JSON响应
                 JSONObject jsonResponse = new JSONObject(response.toString());
                 
                 JSONArray articles;
@@ -172,6 +175,7 @@ public class NewsApiService {
         });
     }
 
+    // 获取指定页码的模拟新闻数据
     public static List<NewsItem> getMockNewsDataForPage(int page) {
         List<NewsItem> newsList = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
@@ -198,61 +202,23 @@ public class NewsApiService {
             },
             {
                 "数字人民币试点范围进一步扩大",
-                "数字人民币试点范围进一步扩大，更多城市和场景加入试点，推动数字经济发展。",
+                "中国数字人民币试点城市再扩容，应用场景持续丰富，推动数字经济发展。",
                 "https://example.com/news4",
-                "经济日报"
-            },
-            {
-                "银行理财产品收益率回升",
-                "随着市场利率调整，银行理财产品收益率出现回升，投资者可关注相关投资机会。",
-                "https://example.com/news5",
-                "银行家"
-            },
-            {
-                "房地产市场调控政策持续优化",
-                "各地房地产调控政策持续优化，支持刚需和改善性住房需求，促进房地产市场平稳健康发展。",
-                "https://example.com/news6",
-                "房地产报"
-            },
-            {
-                "新能源汽车销量再创新高",
-                "新能源汽车市场持续火爆，销量再创新高，产业链相关企业受益明显。",
-                "https://example.com/news7",
-                "汽车周刊"
-            },
-            {
-                "5G网络建设加速推进",
-                "5G网络建设加速推进，覆盖范围不断扩大，为数字经济发展提供有力支撑。",
-                "https://example.com/news8",
-                "通信世界"
-            },
-            {
-                "人工智能技术应用日益广泛",
-                "人工智能技术在各个领域的应用日益广泛，推动产业升级和数字化转型。",
-                "https://example.com/news9",
-                "科技日报"
-            },
-            {
-                "绿色金融发展势头良好",
-                "绿色金融发展势头良好，为可持续发展提供重要资金支持。",
-                "https://example.com/news10",
-                "金融时报"
+                "新华社"
             }
         };
-
-        // 根据页码选择不同的数据
-        int startIndex = (page - 1) * 10;
-        for (int i = 0; i < 10 && startIndex + i < mockData.length; i++) {
-            String[] data = mockData[startIndex + i];
-            
-            // 根据页码计算时间偏移
-            long timeOffset = (page * 10 + i) * 60000; // 每分钟偏移
-            long adjustedTime = System.currentTimeMillis() - timeOffset;
-            String publishedAt = sdf.format(new Date(adjustedTime));
-            
-            newsList.add(new NewsItem(data[0], data[1], data[2], publishedAt, data[3]));
+        // 生成10条模拟数据
+        for (int i = 0; i < 10; i++) {
+            int idx = (page * 10 + i) % mockData.length;
+            String[] data = mockData[idx];
+            newsList.add(new NewsItem(
+                data[0],
+                data[1],
+                data[2],
+                sdf.format(new Date(System.currentTimeMillis() - i * 3600_000)),
+                data[3]
+            ));
         }
-
         return newsList;
     }
 } 
