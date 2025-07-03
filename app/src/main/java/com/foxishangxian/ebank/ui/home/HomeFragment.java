@@ -153,8 +153,13 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
         NewsApiService.fetchNews("", currentOffset, new NewsApiService.NewsCallback() {
             @Override
             public void onSuccess(List<NewsItem> newsList) {
+                if (!isAdded() || binding == null) {
+                    isLoading = false;
+                    return;
+                }
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
+                        if (!isAdded() || binding == null) return;
                         // 隐藏加载更多状态
                         newsAdapter.setLoadingMore(false);
                         
@@ -195,8 +200,13 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
 
             @Override
             public void onError(String error) {
+                if (!isAdded() || binding == null) {
+                    isLoading = false;
+                    return;
+                }
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
+                        if (!isAdded() || binding == null) return;
                         // 隐藏加载更多状态
                         newsAdapter.setLoadingMore(false);
                         isLoading = false;

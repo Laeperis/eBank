@@ -67,7 +67,7 @@
                                 android:id="@+id/tv_card_manage"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="卡片管理"
+                                android:text="卡片\n管理"
                                 android:textSize="18sp"
                                 android:textColor="@color/black"
                                 android:layout_marginStart="20dp"/>
@@ -103,7 +103,7 @@
                                 android:id="@+id/tv_transfer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="转账汇款"
+                                android:text="转账\n汇款"
                                 android:textSize="18sp"
                                 android:textColor="@color/black"
                                 android:layout_marginStart="20dp"/>
@@ -145,7 +145,7 @@
                                 android:id="@+id/tv_income_expense"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="收支分析"
+                                android:text="收支\n分析"
                                 android:textSize="18sp"
                                 android:textColor="@color/black"
                                 android:layout_marginStart="20dp"/>
@@ -181,7 +181,7 @@
                                 android:id="@+id/tv_transfer_record"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="转账记录"
+                                android:text="转账\n记录"
                                 android:textSize="18sp"
                                 android:textColor="@color/black"
                                 android:layout_marginStart="20dp"/>
