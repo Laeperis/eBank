@@ -33,28 +33,38 @@ public class WealthFragment extends Fragment {
         binding = FragmentWealthBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // 查询数据库，统计总资产
+        // 查询数据库，统计总资产和收益
         Executors.newSingleThreadExecutor().execute(() -> {
             UserDatabase db = UserDatabase.getInstance(getContext());
             User user = db.userDao().getLoggedInUser();
             double total = 0;
+            double todayEarnings = 0;
+            double totalEarnings = 0;
+            
             if (user != null) {
+                // 计算总资产
                 java.util.List<BankCard> cards = db.bankCardDao().getCardsByUserId(user.uid);
                 for (BankCard card : cards) {
                     total += card.balance;
                 }
+                
+                // 获取今日收益和累计收益
+                todayEarnings = db.transferRecordDao().getTodayEarnings(user.uid);
+                totalEarnings = db.transferRecordDao().getTotalEarnings(user.uid);
             }
+            
             double finalTotal = total;
+            double finalTodayEarnings = todayEarnings;
+            double finalTotalEarnings = totalEarnings;
+            
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     binding.tvTotalAssets.setText("总资产：￥" + String.format("%,.2f", finalTotal));
+                    binding.tvTodayEarnings.setText("今日收益：" + (finalTodayEarnings >= 0 ? "+" : "") + "￥" + String.format("%,.2f", finalTodayEarnings));
+                    binding.tvTotalEarnings.setText("累计收益：" + (finalTotalEarnings >= 0 ? "+" : "") + "￥" + String.format("%,.2f", finalTotalEarnings));
                 });
             }
         });
-
-        // 设置财富页面内容
-        binding.tvTodayEarnings.setText("今日收益：+￥156.80");
-        binding.tvTotalEarnings.setText("累计收益：+￥2,680.00");
 
         // 初始化今日金价列表
         initGoldPriceList();
