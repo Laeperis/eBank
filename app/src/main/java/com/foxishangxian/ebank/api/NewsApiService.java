@@ -110,10 +110,8 @@ public class NewsApiService {
                 }
 
                 List<NewsItem> newsList = new ArrayList<>();
-                
-                // 检查是否是第一次加载（offset=0），如果是，使用真实API数据
-                // 如果不是第一次加载，使用模拟数据来演示分页功能
-                if (offset == 0) {
+
+                if (offset >= 0) {
                     // 使用真实API数据
                     for (int i = 0; i < articles.length(); i++) {
                         JSONObject article = articles.getJSONObject(i);
@@ -178,7 +176,7 @@ public class NewsApiService {
     // 获取指定页码的模拟新闻数据
     public static List<NewsItem> getMockNewsDataForPage(int page) {
         List<NewsItem> newsList = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         
         // 根据页码生成不同的模拟数据
         String[][] mockData = {
@@ -186,25 +184,25 @@ public class NewsApiService {
                 "央行降准0.25个百分点，释放长期资金约5000亿元",
                 "中国人民银行决定于2024年1月15日下调金融机构存款准备金率0.25个百分点，释放长期资金约5000亿元。",
                 "https://example.com/news1",
-                "财经网"
+                "华尔街见闻"
             },
             {
                 "A股三大指数集体上涨，创业板指涨超2%",
                 "今日A股市场表现强劲，三大指数集体上涨，其中创业板指涨幅超过2%，科技股表现活跃。",
                 "https://example.com/news2",
-                "证券时报"
+                "华尔街见闻"
             },
             {
                 "人民币汇率保持稳定，外汇储备充足",
                 "近期人民币汇率保持稳定，外汇储备充足，为经济稳定发展提供了有力支撑。",
                 "https://example.com/news3",
-                "金融时报"
+                "华尔街见闻"
             },
             {
                 "数字人民币试点范围进一步扩大",
                 "中国数字人民币试点城市再扩容，应用场景持续丰富，推动数字经济发展。",
                 "https://example.com/news4",
-                "新华社"
+                "华尔街见闻"
             }
         };
         // 生成10条模拟数据
