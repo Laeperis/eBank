@@ -95,6 +95,11 @@ public class TransferActivity extends AppCompatActivity {
                 ToastUtil.show(this, "余额不足");
                 return;
             }
+            // 检查对方银行卡号不能为选择的汇款方银行卡号
+            if (targetCard.equals(selectedCard.cardNumber)) {
+                ToastUtil.show(this, "不能向选择的银行卡转账");
+                return;
+            }
             AsyncTask.execute(() -> {
                 UserDatabase db = UserDatabase.getInstance(this);
                 com.foxishangxian.ebank.data.BankCard toCard = db.bankCardDao().getCardByNumber(targetCard);

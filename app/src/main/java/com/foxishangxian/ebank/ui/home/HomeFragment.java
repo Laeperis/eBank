@@ -134,6 +134,7 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
             binding.btnLoadMore.setVisibility(View.VISIBLE);
         } else {
             binding.btnLoadMore.setVisibility(View.GONE);
+            // 如果没有更多数据，按钮隐藏，同时显示"没有更多了"提示
         }
     }
 
@@ -176,10 +177,12 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnNewsClickLis
                             if (newsList.size() < 10) {
                                 hasMoreData = false;
                                 newsAdapter.setNoMore(true);
+                                ToastUtil.show(getContext(), "没有更多了");
                             }
                         } else {
                             hasMoreData = false;
                             newsAdapter.setNoMore(true);
+                            ToastUtil.show(getContext(), "没有更多了");
                         }
                         
                         newsAdapter.notifyDataSetChanged();
